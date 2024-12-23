@@ -17,34 +17,51 @@ let favorites = [];
 
 searchBtn.addEventListener("click", () => {});
 searchBox.addEventListener("click", () => {});
-cardsCharacteres.addEventListener("click", handleFavourite);
+
 
 
 
 /* Functions */
 
+/*Función renderiza una tarjeta */
+
 function renderOneCharacterCard(objCharacter) {
-    return `<li class="cards__box">
+    return `<li class="js_cardBox card__box">
             <img src="${objCharacter.imageUrl}" alt="character image ${objCharacter.name}"/>
             <p>${objCharacter.name}</p>
           </li>`;
     
 };
 
+/*Función renderiza todas las tarjetas y aplica envento click a cada una */
+
 function renderAllCharactersCards() {
     let html = "";
     for(const objCharacter of characters){
         html+= renderOneCharacterCard(objCharacter);
     }
-    return cardsCharacteres.innerHTML=html;
+    cardsCharacteres.innerHTML=html;
+
+    const cardBox = document.querySelectorAll(".js_cardBox");
+
+    for(const li of cardBox) {
+        li.addEventListener("click", (ev) =>{
+            handleFavourite(ev);
+            
+        });
+    }
+    
 };
+
+/*Función añade fondo a la tarjeta favorita */
 
 const handleFavourite = (ev) => {
   console.log('favorite');
   console.log(ev.currentTarget);
 
-  
-  
+  ev.currentTarget.classList.toggle('favourite');
+
+
 };
 
 
@@ -55,4 +72,5 @@ fetch('https://api.disneyapi.dev/character?pageSize=50').
     characters=data.data;
     renderAllCharactersCards();
     console.table(characters);
+        
   })
