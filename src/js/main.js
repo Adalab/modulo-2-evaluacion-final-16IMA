@@ -11,11 +11,21 @@ cardsCharacteres.setAttribute("data-id"," ")
 
 let characters = [];
 let favorites = [];
-
+let charactersSearched = [];
 
 
 searchBtn.addEventListener("click", () => {
-   
+    const searchTerm = searchBox.value.trim().toLowerCase();
+
+    fetch('https://api.disneyapi.dev/character?pageSize=50').
+    then(response => response.json())
+    .then((data)=> {
+        
+        charactersSearched = data.data.filter((char) => char.name.toLowerCase().includes(searchTerm));
+        
+        renderSearchedCards();
+        
+    });
 });
 
 
@@ -85,6 +95,14 @@ function renderFavoritesCards() {
         html+= renderOneCharacterCard(objCharacter);
     }
     cardsFavorites.innerHTML=html;
+};
+
+function renderSearchedCards() {
+    let html = "";
+    for(const objCharacter of charactersSearched){
+        html+= renderOneCharacterCard(objCharacter);
+    }
+    cardsCharacteres.innerHTML=html;
 };
 
 /*Función añade fondo a la tarjeta favorita */
