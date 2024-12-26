@@ -38,11 +38,16 @@ searchBtn.addEventListener("click", () => {
 /*Función renderiza una tarjeta */
 
 function renderOneCharacterCard(objCharacter) {
-    return `<li class="js_cardBox card__box" data-id=${objCharacter._id}>
-            <img src="${objCharacter.imageUrl}" alt="character image ${objCharacter.name}"/>
+  const placeholderImage = "https://via.placeholder.com/210x295/ffffff/555555/?text=Disney";
+  
+  return `<li class="js_cardBox card__box" data-id=${objCharacter._id}>
+            <img 
+              src="${objCharacter.imageUrl || placeholderImage}" 
+              alt="character image ${objCharacter.name}" 
+              onerror="console.error('Imagen no encontrada:', this.src); this.src='${placeholderImage}'"
+            />
             <p>${objCharacter.name}</p>
           </li>`;
-    
 };
 
 /*Función renderiza todas las tarjetas*/
@@ -140,3 +145,6 @@ function fetchSearchedCharacters(searchTerm) {
 
 fetchAllCharacters();
 getFavoritesLocalstorage();
+
+
+
