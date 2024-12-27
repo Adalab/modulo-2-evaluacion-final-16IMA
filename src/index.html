@@ -4,7 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Tu personaje favorito de Disney</title>
-    <link rel="stylesheet" href="src\scss\main.scss" />
+    <link rel="stylesheet" href="./scss/main.scss" />
+    <link href="https://fonts.googleapis.com/css2?family=Mouse+Memoirs&display=swap" rel="stylesheet">
     
   </head>
 
@@ -19,21 +20,16 @@
         <input type="text" class="js_searchBox search__box">
         <button class="js_searchBtn search__btn">Search</button>
       </section>
+
       <section class="js_cards cards">
-        <h2>Favorites<span>&#x2764;</span></h2>
-        <ul class="js_cardsFavorites cards__favorites">
-          <li> 
-            <img src=""/>
-            <p></p>
-          </li>
-        </ul>
-      </section>
-      <section>
-        <h2>Characteres<span>&#x2764;</span></h2>
-        <ul class="js_cardsCharacteres cards__characteres">
-          
-           
-        </ul>
+        <div class="cards__box1">
+          <h2 class="cards__title">Favorites<span class="cards__heart"> &#x2764;</span></h2>
+          <ul class="js_cardsFavorites cards__favorites"></ul>
+        </div>
+        <div class="cards__box2">
+          <h2 class="cards__title">Characters<span class="cards__heart"> &#x2764;</span></h2>
+          <ul class="js_cardsCharacteres cards__characters"></ul>
+        </div>
       </section>
       <footer class="footer">
         <p class="footer__text">Sometimes the right path is not easiest one. &copy;Adalab 2023 </p>
