@@ -7,8 +7,8 @@ const cards = document.querySelector(".js_cards");
 const cardsFavorites = document.querySelector(".js_cardsFavorites");
 const cardsCharacteres = document.querySelector(".js_cardsCharacteres");
 const cardsEraser = document.querySelector(".js_cardsEraser");
-cardsCharacteres.setAttribute("data-id"," ")
-
+cardsCharacteres.setAttribute("data-id"," ");
+cardsEraser.setAttribute("data-id"," ");
 /* Objetos*/
 
 let characters = [];
@@ -26,13 +26,11 @@ searchBtn.addEventListener("click", () => {
     }
   });
 
-
-
-  searchBox.addEventListener("input", () => {
-    if (searchBox.value.trim() === "") {
-      fetchAllCharacters();
-    }
-  });
+searchBox.addEventListener("input", () => {
+  if (searchBox.value.trim() === "") {
+    fetchAllCharacters();
+  }
+});
 
 
 /* Functions */
@@ -43,7 +41,7 @@ function renderOneCharacterCard(objCharacter) {
   const placeholderImage = "https://via.placeholder.com/210x295/ffffff/555555/?text=Disney";
   
   return `<li class="js_cardBox cards__box" data-id=${objCharacter._id}>
-            <p class="js_cardsEraser cards__eraser">X</p>
+            <p class="js_cardsEraser cards__eraser hidden">X</p>
             <img src="${objCharacter.imageUrl || placeholderImage}" 
              alt="character image ${objCharacter.name || "Disney character"}" class="cards__boxImg"/>
             <p class="cards__boxTxt">${objCharacter.name || "Disney character"}</p>
@@ -67,6 +65,7 @@ function attachClickEventsToCards() {
     const cardBox = document.querySelectorAll(".js_cardBox");
 
     for(const li of cardBox) {
+        
         li.addEventListener("click", (ev) =>{
             ev.preventDefault();
             handleFavourite(ev);
@@ -91,6 +90,42 @@ function attachClickEventsToCards() {
     };
 };
 
+function attachClickEventsToEraserCards() {
+  const eraser = document.querySelectorAll(".js_cardsEraser");
+
+  for(const i of eraser) {
+      
+      i.addEventListener("click", (ev) =>{
+          ev.preventDefault();
+          handleEraser(ev);
+
+          /*Coge el atributo nuevo data-id como ancla para coger el objeto del array characters e incluirlo en el array favorites */
+
+          const idCharacter = ev.currentTarget.getAttribute("data-id");
+          const character = characters.find((char) => char._id === parseInt(idCharacter));
+
+          /*Establece una condición if para evitar duplicados en el array favorites */
+
+          if (!favorites.some((char) => char._id === character._id)) {
+              favorites.push(character);
+              renderFavoritesCards();
+
+              /*Incluye en el localStorage el array favorites*/
+
+              localStorage.setItem('favorites', JSON.stringify(favorites));
+          };
+          
+      });
+  };
+};
+
+
+cardsEraser.addEventListener("click",() => {
+  ev.preventDefault();
+  handleEraser(ev);
+});
+
+
 
 /*Función renderiza todas las tarjetas de favoritos */
 
@@ -105,14 +140,13 @@ function renderFavoritesCards() {
 /*Función añade fondo a la tarjeta favorita */
 
 const handleFavourite = (ev) => {
-  console.log('favorite');
-  console.log(ev.currentTarget);
-
-  ev.currentTarget.classList.toggle('favourite');
-
-
+  ev.currentTarget.classList.toggle('cards__favorite');
 };
 
+const handleEraser = (ev) => {
+  ev.currentTarget.classList.add('cards__eraser');
+  ev.currentTarget.classList.remove('hidden');
+};
 
 function fetchAllCharacters(){
     fetch('https://api.disneyapi.dev/character?pageSize=50').

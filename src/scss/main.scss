@@ -121,5 +121,24 @@
         right: 10px;
         z-index: 99;
     }
+    &__favorite{
+        background-color: rgb(242, 78, 127);
+    }
+}
+.footer{
+    text-align: center;
+    padding: 5px;
+    background-color: rgb(242, 78, 127);
+    color: white;
+    font-family: "Mouse Memoirs", serif;
+    font-size: 20px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    box-shadow: 2px 2px 4px 0 rgba(20, 20, 20, 0.3);
+    z-index: 999;
+}
+.hidden{
+    display: none;
 }   
 
