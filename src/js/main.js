@@ -6,7 +6,9 @@ const searchBtn = document.querySelector(".js_searchBtn");
 const cards = document.querySelector(".js_cards");
 const cardsFavorites = document.querySelector(".js_cardsFavorites");
 const cardsCharacteres = document.querySelector(".js_cardsCharacteres");
+const cardsEraser = document.querySelector(".js_cardsEraser");
 cardsCharacteres.setAttribute("data-id"," ")
+
 /* Objetos*/
 
 let characters = [];
@@ -40,13 +42,11 @@ searchBtn.addEventListener("click", () => {
 function renderOneCharacterCard(objCharacter) {
   const placeholderImage = "https://via.placeholder.com/210x295/ffffff/555555/?text=Disney";
   
-  return `<li class="js_cardBox card__box" data-id=${objCharacter._id}>
-            <img 
-              src="${objCharacter.imageUrl || placeholderImage}" 
-              alt="character image ${objCharacter.name}" 
-              onerror="console.error('Imagen no encontrada:', this.src); this.src='${placeholderImage}'"
-            />
-            <p>${objCharacter.name}</p>
+  return `<li class="js_cardBox cards__box" data-id=${objCharacter._id}>
+            <p class="js_cardsEraser cards__eraser">X</p>
+            <img src="${objCharacter.imageUrl || placeholderImage}" 
+             alt="character image ${objCharacter.name || "Disney character"}" class="cards__boxImg"/>
+            <p class="cards__boxTxt">${objCharacter.name || "Disney character"}</p>
           </li>`;
 };
 
