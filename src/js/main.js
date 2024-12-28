@@ -6,8 +6,8 @@ const searchBtn = document.querySelector(".js_searchBtn");
 const cards = document.querySelector(".js_cards");
 const cardsFavorites = document.querySelector(".js_cardsFavorites");
 const cardsCharacteres = document.querySelector(".js_cardsCharacteres");
-
-
+const cardsBox1 = document.querySelector(".js_cardsBox1");
+const cleanBtn = document.querySelector(".js_cardsCleanBtn")
 
 /* Objetos*/
 
@@ -32,6 +32,13 @@ searchBox.addEventListener("input", () => {
   }
 });
 
+cleanBtn.addEventListener("click", () => {
+  event.preventDefault();
+  localStorage.removeItem("favorites");
+  getFavoritesLocalstorage();
+  changeClassForcharacters();
+  
+  });
 
 /* Functions */
 
@@ -120,9 +127,11 @@ function attachClickEventsToEraserCards() {
 /*Función renderiza todas las tarjetas de favoritos */
 
 function renderFavoritesCards() {
+  
     
     let html = "";
     for(const objCharacter of favorites){
+        
         html+= renderOneCharacterCard(objCharacter);
     }
     cardsFavorites.innerHTML=html;
@@ -137,8 +146,10 @@ function renderFavoritesCards() {
 /*Función añade fondo a la tarjeta favorita */
 
 const handleFavourite = (ev) => {
-  ev.currentTarget.classList.add('cards__favorite', true);
+  ev.currentTarget.classList.add('cards__favorite');
 };
+
+
 
 function changeClassForFavorites() {
   for (const child of cardsFavorites.children) {
@@ -148,7 +159,7 @@ function changeClassForFavorites() {
   const cardBoxesFavorites = document.querySelectorAll(".js_cardBoxFavorite");
   for (const cardBoxFavorite of cardBoxesFavorites) {
     for (const child of cardBoxFavorite.children) {
-      const id = cardBoxFavorite.getAttribute("data-id")
+      const id = cardBoxFavorite.getAttribute("data-id");
       const span = document.createElement("span");
       const text = document.createTextNode("✘");
       span.classList.add("js_cardsEraser", "cards__eraser");
@@ -157,9 +168,14 @@ function changeClassForFavorites() {
       child.appendChild(span);
     }
   }
-
+  
 };
 
+function changeClassForcharacters() {
+  for (const child of cardsCharacteres.children) {
+    child.classList.remove("cards__favorite");
+  }
+};
 
 function fetchAllCharacters(){
     fetch('https://api.disneyapi.dev/character?pageSize=50').
@@ -191,6 +207,7 @@ function fetchSearchedCharacters(searchTerm) {
       .then((data) => {
           const filteredCharacters = data.data.filter((char) =>
           char.name.toLowerCase().includes(searchTerm));
+          
         renderAllCharactersCards(filteredCharacters);
     })
       .catch((error) =>
