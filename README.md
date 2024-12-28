@@ -2,7 +2,7 @@
 # Disney Character Favorites
 Una aplicación web que te permite explorar personajes de Disney, marcarlos como favoritos y gestionarlos. Los personajes favoritos se almacenan localmente para que puedas verlos incluso al recargar la página.
 
-Está publicada en: 
+Está publicada en: https://beta.adalab.es/modulo-2-evaluacion-final-16IMA/
 
 ## 🛠️ Cómo iniciar la aplicación
 1. Clonar el repositorio
