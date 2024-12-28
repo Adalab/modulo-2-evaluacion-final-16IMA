@@ -6,9 +6,9 @@ const searchBtn = document.querySelector(".js_searchBtn");
 const cards = document.querySelector(".js_cards");
 const cardsFavorites = document.querySelector(".js_cardsFavorites");
 const cardsCharacteres = document.querySelector(".js_cardsCharacteres");
-const cardsEraser = document.querySelector(".js_cardsEraser");
-cardsCharacteres.setAttribute("data-id"," ");
-cardsEraser.setAttribute("data-id"," ");
+
+
+
 /* Objetos*/
 
 let characters = [];
@@ -39,9 +39,9 @@ searchBox.addEventListener("input", () => {
 
 function renderOneCharacterCard(objCharacter) {
   const placeholderImage = "https://via.placeholder.com/210x295/ffffff/555555/?text=Disney";
-  
-  return `<li class="js_cardBox cards__box" data-id=${objCharacter._id}>
-            <p class="js_cardsEraser cards__eraser hidden">X</p>
+    
+  return `<li class="js_cardBox cards__box" data-id="${objCharacter._id}">
+            <p class="js_cardsEraser cards__eraser hidden" data-id="${objCharacter._id}">X</p>
             <img src="${objCharacter.imageUrl || placeholderImage}" 
              alt="character image ${objCharacter.name || "Disney character"}" class="cards__boxImg"/>
             <p class="cards__boxTxt">${objCharacter.name || "Disney character"}</p>
@@ -67,6 +67,7 @@ function attachClickEventsToCards() {
     for(const li of cardBox) {
         
         li.addEventListener("click", (ev) =>{
+            
             ev.preventDefault();
             handleFavourite(ev);
 
@@ -78,6 +79,7 @@ function attachClickEventsToCards() {
             /*Establece una condición if para evitar duplicados en el array favorites */
 
             if (!favorites.some((char) => char._id === character._id)) {
+                
                 favorites.push(character);
                 renderFavoritesCards();
 
@@ -91,41 +93,27 @@ function attachClickEventsToCards() {
 };
 
 function attachClickEventsToEraserCards() {
-  const eraser = document.querySelectorAll(".js_cardsEraser");
+  const cardsEraser = document.querySelectorAll(".js_cardsEraser"); 
 
-  for(const i of eraser) {
-      
-      i.addEventListener("click", (ev) =>{
-          ev.preventDefault();
-          handleEraser(ev);
+  for (const eraser of cardsEraser) {
+    eraser.addEventListener("click", (ev) => {
+      ev.preventDefault();
 
-          /*Coge el atributo nuevo data-id como ancla para coger el objeto del array characters e incluirlo en el array favorites */
+      const idCharacter = ev.currentTarget.getAttribute("data-id");
+      const index = favorites.findIndex((char) => char._id === parseInt(idCharacter)); 
 
-          const idCharacter = ev.currentTarget.getAttribute("data-id");
-          const character = characters.find((char) => char._id === parseInt(idCharacter));
+      if (index !== -1) {
+       
+        favorites.splice(index, 1);
 
-          /*Establece una condición if para evitar duplicados en el array favorites */
-
-          if (!favorites.some((char) => char._id === character._id)) {
-              favorites.push(character);
-              renderFavoritesCards();
-
-              /*Incluye en el localStorage el array favorites*/
-
-              localStorage.setItem('favorites', JSON.stringify(favorites));
-          };
-          
-      });
-  };
-};
-
-
-cardsEraser.addEventListener("click",() => {
-  ev.preventDefault();
-  handleEraser(ev);
-});
-
-
+       
+        localStorage.setItem("favorites", JSON.stringify(favorites));
+        renderFavoritesCards();       
+        
+      }
+    });
+  }
+}
 
 /*Función renderiza todas las tarjetas de favoritos */
 
@@ -135,18 +123,29 @@ function renderFavoritesCards() {
         html+= renderOneCharacterCard(objCharacter);
     }
     cardsFavorites.innerHTML=html;
+    changeClassForFavorites();
+
+    attachClickEventsToEraserCards();
+    
 };
+
 
 /*Función añade fondo a la tarjeta favorita */
 
 const handleFavourite = (ev) => {
-  ev.currentTarget.classList.toggle('cards__favorite');
+  ev.currentTarget.classList.add('cards__favorite');
 };
 
-const handleEraser = (ev) => {
-  ev.currentTarget.classList.add('cards__eraser');
-  ev.currentTarget.classList.remove('hidden');
+function changeClassForFavorites() {
+  for (const child of cardsFavorites.children) {
+    child.classList.replace("js_cardBox", "js_cardBoxFavorite");
+  }
+  const cardBoxFavorite = document.querySelector(".js_cardBoxFavorite");
+  for (const child of cardBoxFavorite.firstChild) {
+    child.classList.remove('hidden');
+  }
 };
+
 
 function fetchAllCharacters(){
     fetch('https://api.disneyapi.dev/character?pageSize=50').
@@ -154,15 +153,23 @@ function fetchAllCharacters(){
     .then((data)=> {
         characters=data.data;
         renderAllCharactersCards(characters);
+        
     });
 };
         
     
-function getFavoritesLocalstorage(){
-    const savedFavorites = JSON.parse(localStorage.getItem('favorites'));
-    favorites = favorites.concat(savedFavorites);
-    renderFavoritesCards();
-};
+function getFavoritesLocalstorage() {
+  const savedFavorites = JSON.parse(localStorage.getItem('favorites'));
+
+  // Si savedFavorites no existe o no es un array, inicializa favorites como un array vacío
+  if (Array.isArray(savedFavorites)) {
+    favorites = savedFavorites;
+  } else {
+    favorites = []; // Si no hay datos válidos, inicializa favorites como un array vacío
+  }
+
+  renderFavoritesCards();
+}
 
 function fetchSearchedCharacters(searchTerm) {
     fetch("https://api.disneyapi.dev/character?pageSize=50")
@@ -179,6 +186,3 @@ function fetchSearchedCharacters(searchTerm) {
 
 fetchAllCharacters();
 getFavoritesLocalstorage();
-
-
-
