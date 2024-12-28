@@ -1,0 +1,33 @@
+.search{
+    width: 100%;
+    position: absolute;
+    display: flex;
+    justify-content:center;
+    align-items:center;
+    &__box{
+        padding: 0.625rem;
+        border: 0.0625rem solid #ccc;
+        border-radius: 0.3125rem;
+        width: 31.25rem;
+        top: -6.25rem;
+        position:relative;
+        box-shadow: 0.125rem 0.125rem 0.25rem 0 rgba(20, 20, 20, 0.3);
+        margin-right: 0.3125rem;
+        font-family: "Mouse Memoirs", serif;
+        font-size: 1.25rem;
+    }
+    &__btn{ 
+        
+        position: relative;
+        background-color: white;
+        border: 0.0625rem solid #ccc;
+        border-radius: 0.3125rem;
+        top: -6.25rem;
+        padding: 0.625rem;
+        width: 6.25rem;
+        box-shadow: 0.125rem 0.125rem 0.25rem 0 rgba(20, 20, 20, 0.3);
+        margin-left: 0.3125rem;
+        font-family: "Mouse Memoirs", serif;
+        font-size: 1.25rem;
+    }
+}

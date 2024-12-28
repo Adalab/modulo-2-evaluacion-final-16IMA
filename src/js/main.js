@@ -210,9 +210,7 @@ function fetchSearchedCharacters(searchTerm) {
           
         renderAllCharactersCards(filteredCharacters);
     })
-      .catch((error) =>
-        console.error("Error al buscar personajes con término:", error)
-      );
+      
   }
 
 fetchAllCharacters();
