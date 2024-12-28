@@ -41,7 +41,6 @@ function renderOneCharacterCard(objCharacter) {
   const placeholderImage = "https://via.placeholder.com/210x295/ffffff/555555/?text=Disney";
     
   return `<li class="js_cardBox cards__box" data-id="${objCharacter._id}">
-            <p class="js_cardsEraser cards__eraser hidden" data-id="${objCharacter._id}">X</p>
             <img src="${objCharacter.imageUrl || placeholderImage}" 
              alt="character image ${objCharacter.name || "Disney character"}" class="cards__boxImg"/>
             <p class="cards__boxTxt">${objCharacter.name || "Disney character"}</p>
@@ -93,23 +92,26 @@ function attachClickEventsToCards() {
 };
 
 function attachClickEventsToEraserCards() {
-  const cardsEraser = document.querySelectorAll(".js_cardsEraser"); 
+  const cardsEraser = document.querySelectorAll(".js_cardsEraser");
+  console.log(cardsEraser); // Verifica si selecciona los elementos correctamente
+
+  if (cardsEraser.length === 0) {
+    console.error("No se encontraron elementos con la clase .js_cardsEraser");
+    return;
+  }
 
   for (const eraser of cardsEraser) {
     eraser.addEventListener("click", (ev) => {
+      console.log("Click detectado en un elemento .js_cardsEraser"); // Depuración
       ev.preventDefault();
 
       const idCharacter = ev.currentTarget.getAttribute("data-id");
-      const index = favorites.findIndex((char) => char._id === parseInt(idCharacter)); 
+      const index = favorites.findIndex((char) => char._id === parseInt(idCharacter));
 
       if (index !== -1) {
-       
         favorites.splice(index, 1);
-
-       
         localStorage.setItem("favorites", JSON.stringify(favorites));
-        renderFavoritesCards();       
-        
+        renderFavoritesCards();
       }
     });
   }
@@ -118,13 +120,15 @@ function attachClickEventsToEraserCards() {
 /*Función renderiza todas las tarjetas de favoritos */
 
 function renderFavoritesCards() {
+    
     let html = "";
     for(const objCharacter of favorites){
         html+= renderOneCharacterCard(objCharacter);
     }
     cardsFavorites.innerHTML=html;
+    
     changeClassForFavorites();
-
+  
     attachClickEventsToEraserCards();
     
 };
@@ -133,17 +137,27 @@ function renderFavoritesCards() {
 /*Función añade fondo a la tarjeta favorita */
 
 const handleFavourite = (ev) => {
-  ev.currentTarget.classList.add('cards__favorite');
+  ev.currentTarget.classList.add('cards__favorite', true);
 };
 
 function changeClassForFavorites() {
   for (const child of cardsFavorites.children) {
     child.classList.replace("js_cardBox", "js_cardBoxFavorite");
+
   }
-  const cardBoxFavorite = document.querySelector(".js_cardBoxFavorite");
-  for (const child of cardBoxFavorite.firstChild) {
-    child.classList.remove('hidden');
+  const cardBoxesFavorites = document.querySelectorAll(".js_cardBoxFavorite");
+  for (const cardBoxFavorite of cardBoxesFavorites) {
+    for (const child of cardBoxFavorite.children) {
+      const id = cardBoxFavorite.getAttribute("data-id")
+      const span = document.createElement("span");
+      const text = document.createTextNode("✘");
+      span.classList.add("js_cardsEraser", "cards__eraser");
+      span.setAttribute("data-id",id)
+      span.appendChild(text);
+      child.appendChild(span);
+    }
   }
+
 };
 
 
