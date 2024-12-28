@@ -8,12 +8,12 @@ Está publicada en: https://beta.adalab.es/modulo-2-evaluacion-final-16IMA/
 1. Clonar el repositorio
 Clona este repositorio en tu máquina local:
 
-git clone https://github.com/tu-usuario/tu-repositorio.git
+git clone https://github.com/Adalab/modulo-2-evaluacion-final-16IMA.git
 
 2. Navegar al directorio del proyecto
 
 
-cd tu-repositorio
+cd modulo-2-evaluacion-final-16IMA
 
 3. Abrir la aplicación en el navegador
 Como esta aplicación utiliza solo HTML, CSS y JavaScript, no requiere instalación adicional ni servidor backend. Simplemente abre el archivo index.html en tu navegador preferido:
